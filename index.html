@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Virtual DOM Test</title>
+  <style>
+    .container {
+      margin: 20px;
+      padding: 20px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin: 10px;
+      padding: 8px 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Virtual DOM Update</h2>
+    <div id="node">
+      <h1>Hello</h1>
+      <p>This is a page</p>
+    </div>
+    <button id="update-btn">Update with Virtual DOM</button>
+  </div>
+
+  <div class="container">
+    <h2>Direct DOM Update</h2>
+    <div id="regular-node">
+      <h1>Hello</h1>
+      <p>This is a page</p>
+    </div>
+    <button id="direct-update-btn">Update Direct DOM</button>
+  </div>
+
+  <script type="module">
+    import { parseHTML, render } from './src/dom.js';
+    
+    // Virtual dom update 
+    const dom = document.getElementById('node');
+    const vdom = parseHTML(`
+      <h1 style="color:green">Hello</h1>
+      <p>This is a page</p>
+      <p>Some more text</p>
+    `);
+    
+    document.getElementById('update-btn').addEventListener('click', () => {
+      console.time('Virtual DOM update');
+      render(vdom, dom);
+      console.timeEnd('Virtual DOM update');
+    });
+
+    // Normal dom update 
+    const regularNode = document.getElementById('regular-node');
+    document.getElementById('direct-update-btn').addEventListener('click', () => {
+      console.time('Direct DOM update');
+      regularNode.innerHTML = `
+        <h1 style="color:green">Hello</h1>
+        <p>This is a page</p>
+        <p>Some more text</p>
+      `;
+      console.timeEnd('Direct DOM update');
+    });
+  </script>
+</body>
+</html>
