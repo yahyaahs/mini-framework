@@ -1,5 +1,5 @@
 import { createServer } from 'http';
-import { readdirSync, readFile } from 'fs';
+import { readdirSync, readFile, readFileSync, existsSync, lstatSync } from 'fs';
 import path from 'path';
 
 const routes = readdirSync('src')
@@ -22,8 +22,17 @@ const server = createServer(async (req, res) => {
                 const modulePath = path.resolve(page);
                 const { default: render } = await import(`file://${modulePath}`);
                 const html = render();
-                res.writeHead(200, { 'Content-Type': 'text/html' });
-                res.end(html);
+
+                let mime_type = 'text/html';
+                let response_body = html;
+
+                if (html && typeof html === 'object') {
+                    mime_type = 'application/json';
+                    response_body = JSON.stringify(html);
+                }
+
+                res.writeHead(200, { 'Content-Type': mime_type });
+                res.end(response_body);
             } catch (err) {
                 console.error(err);
                 res.writeHead(500).end('Failed to load page');
@@ -32,6 +41,21 @@ const server = createServer(async (req, res) => {
             res.writeHead(404).end('Page Not Found');
         }
         return;
+    }
+
+    const filePath = path.join('.', req.url);
+    if (existsSync(filePath) && lstatSync(filePath).isFile()) {
+        const ext = path.extname(filePath);
+        const contentType = {
+            '.js': 'application/javascript',
+            '.mjs': 'application/javascript',
+            '.css': 'text/css',
+            '.html': 'text/html',
+        }[ext] || 'text/plain';
+
+        const content = readFileSync(filePath);
+        res.writeHead(200, { 'Content-Type': contentType });
+        return res.end(content);
     }
 
     // Serve static index.html for all paths

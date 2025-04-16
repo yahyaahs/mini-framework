@@ -2,36 +2,12 @@
 <html>
 
 <head>
-    <title>Mini-FrameWork</title>
+  <title>Mini-FrameWork</title>
 </head>
 
 <body>
-    <div id="app"></div>
-    <script>
-        loadPage = async (path) => {
-            const res = await fetch(`/api${path}`);
-            const html = await res.text();
-            document.getElementById('app').innerHTML = html;
-        }
-
-        navigate = async (e) => {
-            e.preventDefault();
-            const path = e.target.getAttribute('href');
-            history.pushState({}, '', path);
-            await loadPage(path);
-            document.querySelectorAll('a[data-link]').forEach(link =>
-                link.addEventListener('click', navigate)
-            );
-        }
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            window.addEventListener('popstate', () => loadPage(location.pathname));
-            await loadPage(location.pathname);
-            document.querySelectorAll('a[data-link]').forEach(link =>
-                link.addEventListener('click', navigate)
-            );
-        });
-    </script>
+  <div id="app"></div>
+  <script type="module" src="./lib/main.mjs"></script>
 </body>
 
 </html>
