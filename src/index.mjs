@@ -5,6 +5,9 @@ export default () => {
             <a href="/" data-link>Home</a>
             <a href="/about" data-link>About</a>
         </nav>
-        <h1>About Page</h1>`
+        <h1>Home Page</h1>
+        <h2>${hello()}<h2>`
     )
 }
+
+const hello = () => 'hello word'
