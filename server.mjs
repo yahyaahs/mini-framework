@@ -20,18 +20,15 @@ const server = createServer(async (req, res) => {
         if (page) {
             try {
                 const modulePath = path.resolve(page);
-                const { default: render } = await import(`file://${modulePath}`);
-                const html = render();
+                const { default: compoGenerator } = await import(`file://${modulePath}`);
+                const serverApp = compoGenerator();
 
-                let mime_type = 'text/html';
-                let response_body = html;
+                let response_body = JSON.stringify({
+                    html: serverApp.renderToString(),
+                    data: serverApp.toJSON()
+                });
 
-                if (html && typeof html === 'object') {
-                    mime_type = 'application/json';
-                    response_body = JSON.stringify(html);
-                }
-
-                res.writeHead(200, { 'Content-Type': mime_type });
+                res.writeHead(200, { 'Content-Type': 'text/html' });
                 res.end(response_body);
             } catch (err) {
                 console.error(err);
