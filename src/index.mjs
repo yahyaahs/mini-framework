@@ -11,18 +11,20 @@ export default () => {
             createElement('p', { id: 'count', style: "color: red;" }, ['0']),
             createElement('button', {
                 style: "width: 100px; heigth: 20px; border: 2px solid black;",
-                onClick: function (state, setState) {
+                onClick: (state, setState) => {
                     console.log('boobled: ', state('count'));
                     setState('count', (state('count') || 0) + 1);
                 }
             }, ['Increment']),
-            createElement('p', { id: 'change_input' }, ['You are Typing: ']),
+            createElement('p', {}, [
+                'You are Typing: ',
+                createElement('span', { id: 'change_input', style: 'color: red;' })]),
             createElement('input', {
                 style: 'margin-top: 10px;',
                 value: '',
-                onKeydown: function (state, setState, e) {
-                    console.log('input event fired', state('change_input'));
-                    setState('change_input', (state('change_input') || '') + e.target.value);
+                onKeydown: (state, setState, e) => {
+                    setState('change_input', e.target.value);
+                    console.log('input event fired', e.target.value, state('change_input'));
                 }
             })
         ])
@@ -30,10 +32,6 @@ export default () => {
 
     app.state.set('count', 0);
     app.state.set('change_input', '');
-    // app.eventRegistry.set('gg', () => {
-    // const input = document.querySelector('.nigga')
-    // return input.value
-    // })
 
     return app;
 }
