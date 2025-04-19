@@ -15,7 +15,13 @@ export default () => {
 
     const updateText = (state, setState, e) => {
         setState('_textRef', e.target.value);
-        console.log('input event fired', e.target.value, state('_textRef'));
+        console.log('input event fired', state('_textRef'));
+    }
+
+    let numbr = 3
+    const changeHeart = () => {
+        console.log(numbr);
+        numbr++
     }
 
     return home.setElements(
@@ -28,12 +34,11 @@ export default () => {
             createElement('p', {}, ['You are Typing: ', createElement('span', { id: '_textRef', style: 'color: red;' })]),
             createElement('input', { style: 'margin: 10px;', value: '', onKeydown: updateText }),
             createElement('div', { class: 'new', style: 'display: flex;' }, [
-                createElement('button', { style: "width: 20px; heigth: 20px; border: 2px solid black;" }, ['+']),
-                createElement('div', { class: 'chess' }, [
-                    createElement('span', { class: 'heart', style: 'margin-left: 10px; color: red;' }, ['<3']),
-                    createElement('span', { class: 'heart', style: 'margin-left: 10px; color: red;' }, ['<3']),
-                    createElement('span', { class: 'heart', style: 'margin-left: 10px; color: red;' }, ['<3']),
-                ]),
+                createElement('button', {
+                    style: "width: 20px; heigth: 20px; border: 2px solid black;",
+                    onClick: changeHeart
+                }, ['+']),
+                createElement('div', { class: 'chess' }, Array.from({ length: numbr }).map(() => createElement('span', { class: 'heart', style: 'margin-left: 10px; color: red;' }, ['<3']))),
                 createElement('button', { style: "width: 20px; heigth: 20px; border: 2px solid black;" }, ['-']),
             ])
         ]))

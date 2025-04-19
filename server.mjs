@@ -19,17 +19,10 @@ const server = createServer(async (req, res) => {
 
         if (page) {
             try {
-                const modulePath = path.resolve(page);
-                const { default: compoGenerator } = await import(`file://${modulePath}`);
-                const serverApp = compoGenerator();
+                const webPath = '/' + path.relative('.', page).replace(/\\/g, '/');
 
-                let response_body = JSON.stringify({
-                    html: serverApp.renderToString(),
-                    data: serverApp.toJSON()
-                });
-
-                res.writeHead(200, { 'Content-Type': 'text/html' });
-                res.end(response_body);
+                res.writeHead(200, { 'Content-Type': 'text/plain' });
+                res.end(webPath);
             } catch (err) {
                 console.error(err);
                 res.writeHead(500).end('Failed to load page');
