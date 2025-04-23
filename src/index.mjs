@@ -18,10 +18,16 @@ export default () => {
         console.log('input event fired', state('_textRef'));
     }
 
+
+    home.state.set('_heart', 3);
     let numbr = 3
-    const changeHeart = () => {
-        console.log(numbr);
-        numbr++
+    const changeHeart = (state, setState) => {
+        // setState('_heart', state('_heart') + 1)
+        console.log(state('_heart'));
+        const div = document.getElementById('_heart')
+        const vcompo = home.findElementByDom(div.getAttribute('key')) 
+        home.updateComponant(vcompo,)        
+        console.log(home.findElementByDom(div.getAttribute('key')));
     }
 
     return home.setElements(
@@ -38,7 +44,7 @@ export default () => {
                     style: "width: 20px; heigth: 20px; border: 2px solid black;",
                     onClick: changeHeart
                 }, ['+']),
-                createElement('div', { class: 'chess' }, Array.from({ length: numbr }).map(() => createElement('span', { class: 'heart', style: 'margin-left: 10px; color: red;' }, ['<3']))),
+                createElement('div', { id: '_heart', class: 'chess' }, Array.from({ length: numbr }).map(() => createElement('span', { class: 'heart', style: 'margin-left: 10px; color: red;' }, ['<3']))),
                 createElement('button', { style: "width: 20px; heigth: 20px; border: 2px solid black;" }, ['-']),
             ])
         ]))
