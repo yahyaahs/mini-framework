@@ -19,15 +19,28 @@ export default () => {
     }
 
 
-    home.state.set('_heart', 3);
+    home.state.set('_heart');
+    const heart = createElement('span', { class: 'heart', style: 'margin-left: 10px; color: red;' }, ['<3'])
     let numbr = 3
     const changeHeart = (state, setState) => {
-        // setState('_heart', state('_heart') + 1)
-        console.log(state('_heart'));
-        const div = document.getElementById('_heart')
-        const vcompo = home.findElementByDom(div.getAttribute('key')) 
-        home.updateComponant(vcompo,)        
-        console.log(home.findElementByDom(div.getAttribute('key')));
+        const old = state('_heart')
+        console.log(old);
+
+        if (old === undefined) {
+            setState('_heart', [createElement('span', { class: 'heart', style: 'margin-left: 10px; color: red;' }, ['<3'])])
+        } else {
+
+            setState('_heart', [...old, createElement('span', { class: 'heart', style: 'margin-left: 10px; color: red;' }, ['<3'])])
+        }
+        console.log("heqrt elemt " + state('_heart'),);
+
+
+        // console.log(state());
+
+        // const div = document.getElementById('_heart')
+        // const vcompo = home.findElementByDom(div.getAttribute('key')) 
+        // home.updateComponant(vcompo,)        
+        // console.log(home.findElementByDom(div.getAttribute('key')));
     }
 
     return home.setElements(
@@ -44,7 +57,7 @@ export default () => {
                     style: "width: 20px; heigth: 20px; border: 2px solid black;",
                     onClick: changeHeart
                 }, ['+']),
-                createElement('div', { id: '_heart', class: 'chess' }, Array.from({ length: numbr }).map(() => createElement('span', { class: 'heart', style: 'margin-left: 10px; color: red;' }, ['<3']))),
+                createElement('div', { id: '_heart', class: 'chess' },/* Array.from({ length: numbr }).map(() => createElement('span', { class: 'heart', style: 'margin-left: 10px; color: red;' }, ['<3']))*/),
                 createElement('button', { style: "width: 20px; heigth: 20px; border: 2px solid black;" }, ['-']),
             ])
         ]))
