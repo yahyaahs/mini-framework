@@ -96,6 +96,23 @@ select:focus {
 }
 
 /* Utility */
-.hidden {
-    display: none !important;
+#_heart{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.heart{
+    font-size: larger;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.alive {
+    color: white;
+    background-color: green;
+}
+
+.dead {
+    color: #111;
+    background-color: red;
 }
