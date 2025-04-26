@@ -20,31 +20,28 @@ export default () => {
 
 
     home.state.set('_heart');
-    const heart = createElement('span', { class: 'heart', style: 'margin-left: 10px; color: red;' }, ['<3'])
-    let numbr = 3
-    const changeHeart = (state, setState) => {
-        const old = state('_heart')
-        console.log(old);
+    const heart = ['span', { class: 'heart', style: 'margin-left: 10px; color: red;' }, ['<3']]
 
-        if (old === undefined) {
-            setState('_heart', [createElement('span', { class: 'heart', style: 'margin-left: 10px; color: red;' }, ['<3'])])
-        } else {
+    const addHeart = (state, setState) => {
+        const prev = state('_heart');
 
-            setState('_heart', [...old, createElement('span', { class: 'heart', style: 'margin-left: 10px; color: red;' }, ['<3'])])
+        (prev === undefined) ?
+            setState('_heart', [createElement(...heart)])
+            : setState('_heart', [...prev, createElement(...heart)]);
+    }
+
+    const removeHeart = (state, setState) => {
+        const prev = state('_heart');
+
+        if (prev !== undefined) {
+            const newi = [...prev].slice(1)
+            setState('_heart', newi);
         }
-        console.log("heqrt elemt " + state('_heart'),);
-
-
-        // console.log(state());
-
-        // const div = document.getElementById('_heart')
-        // const vcompo = home.findElementByDom(div.getAttribute('key')) 
-        // home.updateComponant(vcompo,)        
-        // console.log(home.findElementByDom(div.getAttribute('key')));
     }
 
     return home.setElements(
         createElement(...Link('/about', 'go to about')),
+        createElement(...Link('/test', 'go to test')),
         createElement('div', { class: 'counter', style: 'margin-top: 80px; display: flex; flex-direction: column ;justify-content: center; align-items: center; height: 100%;' }, [
             createElement('h1', { style: 'text-align: center; size: 25px;' }, ["nigga-mind Mini-frameWork"]),
             createElement('h2', {}, ['Counter']),
@@ -55,10 +52,13 @@ export default () => {
             createElement('div', { class: 'new', style: 'display: flex;' }, [
                 createElement('button', {
                     style: "width: 20px; heigth: 20px; border: 2px solid black;",
-                    onClick: changeHeart
+                    onClick: addHeart
                 }, ['+']),
-                createElement('div', { id: '_heart', class: 'chess' },/* Array.from({ length: numbr }).map(() => createElement('span', { class: 'heart', style: 'margin-left: 10px; color: red;' }, ['<3']))*/),
-                createElement('button', { style: "width: 20px; heigth: 20px; border: 2px solid black;" }, ['-']),
+                createElement('div', { id: '_heart', class: 'chess' }),
+                createElement('button', {
+                    style: "width: 20px; heigth: 20px; border: 2px solid black;",
+                    onclick: removeHeart,
+                }, ['-']),
             ])
         ]))
 }
