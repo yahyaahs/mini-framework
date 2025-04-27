@@ -51,7 +51,6 @@ export default () => {
         home.createElement(...Link('/about', 'go to about')),
         home.createElement(...Link('/test', 'go to test')),
         home.createElement('div', { class: 'counter', style: 'margin-top: 80px; display: flex; flex-direction: column ;justify-content: center; align-items: center; height: 100%;' }, [
-            home.createElement('h1', { style: 'text-align: center; size: 25px;' }, ["nigga-mind Mini-frameWork"]),
             home.createElement('h2', {}, ['Counter']),
             home.createElement('p', { id: '_countRef', style: "color: red;" }, ['0']),
             home.createElement('button', { style: "width: 100px; heigth: 20px; border: 2px solid black;", onClick: increment }, ['Increment']),
