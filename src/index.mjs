@@ -1,71 +1,80 @@
-import { Link } from "../lib/hooks.mjs";
+import { Link } from "../lib/hooks.mjs"
 import { createComponent } from "../lib/virtual_dom.mjs"
 
 export default () => {
     const home = createComponent()
 
-    home.state.set('_countRef', 0);
-    home.state.set('_textRef', '');
+    home.state.set('_todos', [
+        { task: 'task 1', isDone: false },
+        { task: 'task 2', isDone: false },
+        { task: 'task 3', isDone: false },
+    ])
 
-    const increment = (state, setState) => {
-        console.log('boobled: ', state('_countRef'));
-        setState('_countRef', (state('_countRef') || 0) + 1);
-    }
-
-    const updateText = (state, setState, e) => {
-        setState('_textRef', e.target.value);
-        console.log('input event fired', state('_textRef'));
-    }
-
-
-    const breakHeart = (_, __, e) => {
-        const target = home.findElementByDom(e.target.getAttribute('key'))
-        target.toggleClass('dead')
-    }
-
-    home.state.set('_heart');
-
-    const addHeart = (state, setState) => {
-        const prev = state('_heart');
-
-        const newHeart = home.createElement('span', {
-            class: 'heart alive',
-            onClick: (e) => breakHeart(state, setState, e),
-        }, ['<3']);
-
-        (prev === undefined) ?
-            setState('_heart', [newHeart])
-            : setState('_heart', [...prev, newHeart]);
-    }
-
-    const removeHeart = (state, setState) => {
-        const prev = state('_heart');
-
-        if (prev !== undefined) {
-            const newi = [...prev].slice(1)
-            setState('_heart', newi);
+    const addNewTask = (state, setState, e) => {
+        if (e.key === 'Enter') {
+            console.log('submit', e.target.value);
+            const prevTask = state('_todos')
+            setState('_todos', [...prevTask, { task: e.target.value, isDone: false }])
         }
     }
 
+    const markTask = () => { }
+
+    const markAllTask = () => {
+        console.log('all marked');
+    }
+
+    const removeTask = () => {
+        console.log('try to remove task');
+    }
+    const removeAllTask = () => { }
+    const updateTask = () => { }
+    const taskBlure = () => { }
+    const insertUpdatTask = () => { }
+
     return home.setElements(
-        home.createElement(...Link('/about', 'go to about')),
-        home.createElement(...Link('/test', 'go to test')),
-        home.createElement('div', { class: 'counter', style: 'margin-top: 80px; display: flex; flex-direction: column ;justify-content: center; align-items: center; height: 100%;' }, [
-            home.createElement('h2', {}, ['Counter']),
-            home.createElement('p', { id: '_countRef', style: "color: red;" }, ['0']),
-            home.createElement('button', { style: "width: 100px; heigth: 20px; border: 2px solid black;", onClick: increment }, ['Increment']),
-            home.createElement('p', {}, ['You are Typing: ', home.createElement('span', { id: '_textRef', style: 'color: red;' })]),
-            home.createElement('input', { style: 'margin: 10px;', value: '', onKeydown: updateText }),
-            home.createElement('div', { class: 'new', style: 'display: flex;' }, [
-                home.createElement('button', {
-                    style: "width: 20px; heigth: 20px; border: 2px solid black;",
-                    onClick: addHeart
-                }, ['+']),
-                home.createElement('div', { id: '_heart', class: 'chess' }),
-                home.createElement('button', {
-                    style: "width: 20px; heigth: 20px; border: 2px solid black;",
-                    onclick: removeHeart,
-                }, ['-']),
+        home.createElement('div', {}, [
+            home.createElement('section', { class: 'todoapp' }, [
+                home.createElement('header', { class: 'header' }, [
+                    home.createElement('h1', {}, ['todos']),
+                    home.createElement('input', {
+                        type: 'text', maxlength: 50, placeholder: 'What needs to be done?',
+                        class: 'new-todo',
+                        onKeydown: addNewTask,
+                    })
+                ]),
+                home.createElement('section', { class: 'main' }, [
+                    home.createElement('label', { id: 'toggle-all', class: 'toggle-all', type: 'checkbox', onClick: markAllTask }, []),
+                    home.createElement('label', { for: 'toggle-all', }, ['Mark all as complete']),
+                    home.createElement('ul', { id: '_todos', class: 'todo-list' },
+                        home.getState('_todos').map((task) => {
+                            return home.createElement('li', { class: '' }, [
+                                home.createElement('div', { class: 'view' }, [
+                                    home.createElement('input', { class: 'toggle', type: 'checkbox', onClick: markTask }, []),
+                                    home.createElement('label', { onDblClick: updateTask, onBlur: taskBlure, onKeyDown: insertUpdatTask }, [task.task]),
+                                    home.createElement('button', { class: 'destroy', onClick: removeTask }, []),
+                                ]),
+                            ])
+                        })
+                    )
+                ]),
+                home.createElement('footer', { class: 'footer' }, [
+                    home.createElement('span', { class: 'todo-count' }, [
+                        home.createElement('strong', {}, [`${home.getState('_todos').length} items left`])
+                    ]),
+                    home.createElement('ul', { class: 'filters' }, [
+                        home.createElement('li', {}, [home.createElement(...Link('/', { class: 96 == "all" ? "selected" : "", }, 'All'))]),
+                        home.createElement('li', {}, [home.createElement(...Link('/active', { class: 96 == "active" ? "selected" : "", }, 'Active'))]),
+                        home.createElement('li', {}, [home.createElement(...Link('/completed', { class: 96 == "completed" ? "selected" : "", }, 'Completed'))]),
+                    ]),
+                    home.createElement('button', { class: 'clear-completed', onclick: removeAllTask }, ['Clear completed']),
+                ]),
+            ]),
+            home.createElement('footer', { class: 'info' }, [
+                home.createElement('p', {}, ["Double-click to edit a todo"]),
+                home.createElement('p', {}, ["Created by the TodoMVC Team"]),
+                home.createElement('p', {}, ["Part of ", home.createElement('a', { href: "http://todomvc.com" }, ["TodoMVC"]),])
             ])
-        ]))
+        ])
+    )
 }
