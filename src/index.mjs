@@ -6,12 +6,12 @@ import { Task } from "./components/task.mjs"
 export default () => {
     const home = createComponent()
 
-    home.state.set('_todos', [])
+    home.useState('_todos', [])
 
-    const addNewTask = (state, setState, e) => {
+    const addNewTask = (e) => {        
         if (e.key === 'Enter') {
-            const prevTask = state('_todos');
-            setState('_todos', [...prevTask, Task(home, { task: e.target.value, isDone: false })]);
+            const prevTask = home.getState('_todos');
+            home.setState('_todos', [...prevTask, Task(home, { task: e.target.value, isDone: false })]);
             e.target.value = '';
         }
     }

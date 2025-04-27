@@ -1,14 +1,30 @@
 const Task = (root, newTask) => {
-    const markTask = () => { }
+    const markTask = (e) => {
+        const taskKey = e.target.parentElement?.parentElement?.getAttribute('key');
+        if (!taskKey) return;
 
-    const updateTask = () => { }
+        const tasks = root.getState('_todos');
+        const task = tasks.find(t => t.key == taskKey);
 
-    const insertUpdatTask = () => { }
+        if (task) task.toggleClass('completed');
+    }
 
-    const removeTask = (state, setState, e) => {
-        console.log('try to remove task');
-        console.log(state, setState, e);
-        console.log(state('_todos'));
+    const removeTask = (e) => {
+        const taskKey = e.target.parentElement?.parentElement?.getAttribute('key');
+        if (!taskKey) return;
+
+        const tasks = root.getState('_todos');
+        const newtasks = tasks.filter(t => t.key != taskKey);
+
+        root.setState('_todos', newtasks)
+    }
+
+    const updateTask = () => {
+        console.log('try to update');
+    }
+
+    const insertUpdatTask = () => {
+        console.log('inserting new update');
     }
 
     return root.createElement('li', { class: newTask.isDone ? 'completed' : '' }, [
