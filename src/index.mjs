@@ -19,7 +19,15 @@ export default (prevCall) => {
         if (e.key === 'Enter' && e.target.value.length > 0) {
             const prevTask = home.getState('_todos');
             home.setState('_todos', [...prevTask, Task(home, { task: e.target.value, isDone: false })]);
-            home.setState('_taskCount', `${home.getState('_todos').length} items left`)
+
+            const newTasks = home.getState('_todos');
+            home.setState('_taskCount', `${newTasks.length} items left`)
+
+            if (newTasks.length === 1) {
+                const footer = home.selectElement('footer.footer');
+                footer.removeClass('hidden');
+            }
+
             e.target.value = '';
         }
     }
@@ -35,8 +43,11 @@ export default (prevCall) => {
         const tasks = home.getState('_todos');
         const newtasks = tasks.filter(t => !t.attrs.class.includes('completed'));
         home.setState('_todos', newtasks)
-        home.setState('_taskCount', `${home.getState('_todos').length} items left`)
-
+        home.setState('_taskCount', `${newtasks.length} items left`)
+        if (newtasks.length === 0) {
+            const footer = home.selectElement('footer.footer');
+            footer.addClass('hidden');
+        }
     }
 
     return home.setElements(
@@ -57,7 +68,7 @@ export default (prevCall) => {
                         home.getState('_todos').map((task) => Task(home, task))
                     )
                 ]),
-                home.createElement('footer', { class: 'footer' }, [
+                home.createElement('footer', { class: 'footer hidden' }, [
                     home.createElement('span', { class: 'todo-count' }, [
                         home.createElement('strong', { id: '_taskCount' }, [`0 items left`])
                     ]),

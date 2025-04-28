@@ -7,6 +7,8 @@ const Task = (root, newTask) => {
         const task = tasks.find(t => t.key == taskKey);
 
         if (task) task.toggleClass('completed');
+        if (location.pathname === '/active') task.toggleClass('hidden');
+        if (location.pathname === '/completed') task.toggleClass('hidden');
     }
 
     const removeTask = (e) => {
@@ -17,7 +19,11 @@ const Task = (root, newTask) => {
         const newtasks = tasks.filter(t => t.key != taskKey);
 
         root.setState('_todos', newtasks)
-        root.setState('_taskCount', `${root.getState('_todos').length} items left`)
+        root.setState('_taskCount', `${newtasks.length} items left`)
+        if (newtasks.length === 0) {
+            const footer = root.selectElement('footer.footer');
+            footer.addClass('hidden');
+        }
     }
 
     const updateTask = () => {
