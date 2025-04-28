@@ -8,8 +8,6 @@ export default () => {
         return
     }
 
-    console.log(homeData);
-    
     const tasks = homeData.getState('_todos')
     for (let task of tasks) {
         (!task.attrs.class.includes('completed')) ? task.addClass('hidden') : task.removeClass('hidden');
