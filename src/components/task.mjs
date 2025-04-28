@@ -17,6 +17,7 @@ const Task = (root, newTask) => {
         const newtasks = tasks.filter(t => t.key != taskKey);
 
         root.setState('_todos', newtasks)
+        root.setState('_taskCount', `${root.getState('_todos').length} items left`)
     }
 
     const updateTask = () => {
@@ -27,7 +28,10 @@ const Task = (root, newTask) => {
         console.log('inserting new update');
     }
 
-    return root.createElement('li', { class: newTask.isDone ? 'completed' : '' }, [
+    let taskClass = newTask.isDone ? 'completed' : ''
+    if (location.pathname === '/completed') taskClass += ' hidden';
+
+    return root.createElement('li', { class: taskClass }, [
         root.createElement('div', { class: 'view' }, [
             root.createElement('input', { class: 'toggle', type: 'checkbox', onClick: markTask }, []),
             root.createElement('label', { onDblClick: updateTask, onKeyDown: insertUpdatTask }, [newTask.task]),
