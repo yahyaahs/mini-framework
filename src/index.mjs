@@ -32,16 +32,11 @@ export default (prevCall) => {
         }
     }
 
-    let ischecked = false
-    const markAllTask = (e) => { // ??
-        console.log('mark all');
-        ischecked = !ischecked;
-
+    const markAllTask = () => {
         const tasks = home.getState('_todos');
         for (let task of tasks) {
-            const checkbox = task.children[0].children[0];
-            ischecked ? task.addClass('completed') : task.removeClass('completed');
-            ischecked ? checkbox.addAttrs('checked',true) : checkbox.removeAttrs('checked');
+            task.addClass('completed');
+            document.getElementById(task.children[0].children[0]?.attrs?.id).checked = true
         }
     }
 

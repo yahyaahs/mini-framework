@@ -71,17 +71,13 @@ const Task = (root, newTask) => {
 
     return root.createElement('li', { class: taskClass }, [
         root.createElement('div', { class: 'view' }, [
-            root.createElement('input', { class: 'toggle', type: 'checkbox', onClick: markTask }, []),
+            root.createElement('input', { id: `_taskX_${root.keys}`, class: 'toggle', type: 'checkbox', onClick: markTask }, []),
             root.createElement('label', { id: taskId, onDblClick: updateTask }, [newTask.task]),
             root.createElement('button', { class: 'destroy', onClick: removeTask }, []),
         ]),
         root.createElement('div', { class: 'input-container' }, [
             root.createElement('input', {
                 id: 'edit-todo-input', class: 'edit', type: 'text',
-                // onClick: (e) => {
-                // console.log(e.target);
-                // 
-                // },
                 onKeydown: insertUpdatTask,
                 onBlur: giveUp
             }, []),
