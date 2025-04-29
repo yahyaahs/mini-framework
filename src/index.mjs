@@ -1,4 +1,4 @@
-import { createComponent } from "../lib/virtual_dom.mjs"
+import { createComponent } from "../dist/virtual_dom.mjs"
 import { Filter } from "./components/filter.mjs"
 import { Footer } from "./components/footer.mjs"
 import { Task } from "./components/task.mjs"
