@@ -19,20 +19,10 @@ const server = createServer(async (req, res) => {
 
         if (page) {
             try {
-                const modulePath = path.resolve(page);
-                const { default: render } = await import(`file://${modulePath}`);
-                const html = render();
+                const webPath = '/' + path.relative('.', page).replace(/\\/g, '/');
 
-                let mime_type = 'text/html';
-                let response_body = html;
-
-                if (html && typeof html === 'object') {
-                    mime_type = 'application/json';
-                    response_body = JSON.stringify(html);
-                }
-
-                res.writeHead(200, { 'Content-Type': mime_type });
-                res.end(response_body);
+                res.writeHead(200, { 'Content-Type': 'text/plain' });
+                res.end(webPath);
             } catch (err) {
                 console.error(err);
                 res.writeHead(500).end('Failed to load page');
