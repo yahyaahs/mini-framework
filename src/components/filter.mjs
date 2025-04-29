@@ -1,4 +1,4 @@
-import { Link } from "../../lib/hooks.mjs"
+import { Link } from "../../dist/hooks.mjs"
 
 const Filter = (root) => {
     return root.createElement('ul', { class: 'filters' }, [

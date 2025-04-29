@@ -1,5 +1,5 @@
-import { Redirect } from "../lib/hooks.mjs";
-import { __V_Server } from "../lib/main.mjs";
+import { Redirect } from "../dist/hooks.mjs";
+import { __V_Server } from "../dist/main.mjs";
 
 export default () => {
     const homeData = __V_Server.PrevApp.get('/')
