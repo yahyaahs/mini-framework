@@ -32,10 +32,16 @@ export default (prevCall) => {
         }
     }
 
-    const markAllTask = () => { // ??
-        const tasks = root.getState('_todos');
+    let ischecked = false
+    const markAllTask = (e) => { // ??
+        console.log('mark all');
+        ischecked = !ischecked;
+
+        const tasks = home.getState('_todos');
         for (let task of tasks) {
-            task.addClass('completed');
+            const checkbox = task.children[0].children[0];
+            ischecked ? task.addClass('completed') : task.removeClass('completed');
+            ischecked ? checkbox.addAttrs('checked',true) : checkbox.removeAttrs('checked');
         }
     }
 
@@ -58,12 +64,13 @@ export default (prevCall) => {
                     home.createElement('input', {
                         type: 'text', maxlength: 50, placeholder: 'What needs to be done?',
                         class: 'new-todo',
+                        autofocus: true,
                         onKeydown: addNewTask,
                     })
                 ]),
                 home.createElement('section', { class: 'main' }, [
-                    home.createElement('label', { id: 'toggle-all', class: 'toggle-all', type: 'checkbox', onClick: markAllTask }, []),
-                    home.createElement('label', { for: 'toggle-all', }, ['Mark all as complete']),
+                    home.createElement('label', { id: 'toggle-all', class: 'toggle-all', type: 'checkbox' }, []),
+                    home.createElement('label', { for: 'toggle-all', onClick: markAllTask }, ['Mark all as complete']),
                     home.createElement('ul', { id: '_todos', class: 'todo-list' },
                         home.getState('_todos').map((task) => Task(home, task))
                     )
@@ -73,7 +80,7 @@ export default (prevCall) => {
                         home.createElement('strong', { id: '_taskCount' }, [`0 items left`])
                     ]),
                     Filter(home),
-                    home.createElement('button', { class: 'clear-completed', onclick: clearDoneTask }, ['Clear completed']),
+                    home.createElement('button', { class: 'clear-completed', onClick: clearDoneTask }, ['Clear completed']),
                 ]),
             ]),
             Footer(home)

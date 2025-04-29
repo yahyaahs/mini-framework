@@ -1,4 +1,7 @@
 const Task = (root, newTask) => {
+    const taskId = `_taskN_${root.keys}`
+    root.useState(taskId, newTask.task)
+
     const markTask = (e) => {
         const taskKey = e.target.parentElement?.parentElement?.getAttribute('key');
         if (!taskKey) return;
@@ -26,12 +29,41 @@ const Task = (root, newTask) => {
         }
     }
 
-    const updateTask = () => {
-        console.log('try to update');
+    const updateTask = (e) => {
+        const taskKey = e.target.parentElement?.parentElement?.getAttribute('key');
+        if (!taskKey) return;
+
+        const tasks = root.getState('_todos');
+        const task = tasks.find(t => t.key == taskKey);
+
+        task.addClass('editing')
+        const newInput = document.querySelector(`[key="${task.children[1].children[0].key}"]`)
+        newInput.value = e.target.textContent;
+        newInput.focus();
     }
 
-    const insertUpdatTask = () => {
-        console.log('inserting new update');
+    const insertUpdatTask = (e) => {
+        if (e.key === 'Enter' && e.target.value.length > 0) {
+            const taskKey = e.target.parentElement?.parentElement?.getAttribute('key');
+            if (!taskKey) return;
+
+            const tasks = root.getState('_todos');
+            const task = tasks.find(t => t.key == taskKey);
+
+            root.setState(taskId, e.target.value)
+            task.removeClass('editing')
+            e.target.value = ''
+        }
+    }
+
+    const giveUp = (e) => {
+        const taskKey = e.target.parentElement?.parentElement?.getAttribute('key');
+        if (!taskKey) return;
+
+        const tasks = root.getState('_todos');
+        const task = tasks.find(t => t.key == taskKey);
+
+        task.removeClass('editing')
     }
 
     let taskClass = newTask.isDone ? 'completed' : ''
@@ -40,8 +72,20 @@ const Task = (root, newTask) => {
     return root.createElement('li', { class: taskClass }, [
         root.createElement('div', { class: 'view' }, [
             root.createElement('input', { class: 'toggle', type: 'checkbox', onClick: markTask }, []),
-            root.createElement('label', { onDblClick: updateTask, onKeyDown: insertUpdatTask }, [newTask.task]),
+            root.createElement('label', { id: taskId, onDblClick: updateTask }, [newTask.task]),
             root.createElement('button', { class: 'destroy', onClick: removeTask }, []),
+        ]),
+        root.createElement('div', { class: 'input-container' }, [
+            root.createElement('input', {
+                id: 'edit-todo-input', class: 'edit', type: 'text',
+                // onClick: (e) => {
+                // console.log(e.target);
+                // 
+                // },
+                onKeydown: insertUpdatTask,
+                onBlur: giveUp
+            }, []),
+            root.createElement('label', { class: 'visually-hidden', for: 'edit-todo-input' }, ['Edit Todo Input']),
         ]),
     ])
 }
