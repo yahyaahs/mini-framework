@@ -8,7 +8,12 @@ const __V_Server = {
 const loadPage = async (path) => {
     try {
         const res = await fetch(`/api${path}`);
-        const data = await res.text();
+        let data = '';
+        if (res.status === 404){
+            data = '/src/404.mjs'
+        }else{
+            data = await res.text();
+        }
 
         const { default: compoGenerator } = await import(`${data}`);
         const serverApp = compoGenerator(__V_Server.PrevApp.get(path));
