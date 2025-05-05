@@ -18,30 +18,28 @@ vdom (Object): The parent virtual DOM instance managing this element.
 
 ## Key Methods
 
-- Class Manipulation
-
 ```javascript
+
 toggleClass(className): Toggles a CSS class (adds if absent, removes if present).
-
-addClass(newClass): Appends a CSS class to the element.
-
+````
+addClass(newClass) : Appends a CSS class to the element.
+````
 removeClass(toRemove): Removes a specified CSS class.
 
-Attribute Management
+//Attribute Management
+
 addAttrs(key, value): Sets an attribute (value defaults to null for boolean attributes like disabled).
-
 removeAttrs(key): Deletes an attribute from the element.
-
 updateAttrs(): Synchronizes virtual attributes with the actual DOM element (used internally during rendering).
 
-Event Handling
+//Event Handling
+
 registerEvent(name, func): Attaches an event listener (e.g., 'click', func) to the element.
 
-Serialization & Rendering
+//Serialization & Rendering
+
 toJSON(): Returns a JSON representation of the element and its hierarchy.
-
 render(): Generates a live DOM element from the virtual structure.
-
 renderToString(): Outputs the element as an HTML string (useful for SSR or static rendering).
 ```
 
