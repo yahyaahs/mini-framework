@@ -26,9 +26,3 @@ app.createElement(...Link('/about', {}, 'visite About page'));
 
 - The  `__V_Server` object is where we store the previous visited page and a map of call componant rendred so to apply the caching and reccaling componant, example if you want to made a page or an app render in 2 methodes first it will return the app componant and second you will check if the app is contained in `__V_Server.PrevApp` or there link is visited so you will just get it and modifiet or clean it.
 
-## Future Improvements
-
-- Add more detailed error handling.
-- Optimize performance for larger applications.
-
-For further details, refer to the project README or other module-specific documentation.
