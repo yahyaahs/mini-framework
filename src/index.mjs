@@ -24,6 +24,8 @@ export default (prevCall) => {
             home.setState('_taskCount', `${newTasks.length} items left`)
 
             if (newTasks.length === 1) {
+                const mark_all = home.selectElement('label[for="toggle-all"]');
+                mark_all.removeClass('hide-mark');
                 const footer = home.selectElement('footer.footer');
                 footer.removeClass('hidden');
             }
@@ -32,9 +34,10 @@ export default (prevCall) => {
         }
     }
 
-    let toggelMark = false;
     const markAllTask = () => {
+        if (location.pathname === '/completed') return;
         const tasks = home.getState('_todos');
+        const toggelMark = tasks.every(t => t.attrs.class == "completed");
         for (let task of tasks) {
             if (toggelMark) {
                 task.removeClass('completed');
@@ -46,15 +49,16 @@ export default (prevCall) => {
                 checkbox.checked = true;
             }
         }
-        toggelMark = !toggelMark;
     }
 
-    const clearDoneTask = () => {
+    const clearDoneTask = (e) => {
         const tasks = home.getState('_todos');
         const newtasks = tasks.filter(t => !t.attrs.class.includes('completed'));
         home.setState('_todos', newtasks)
         home.setState('_taskCount', `${newtasks.length} items left`)
         if (newtasks.length === 0) {
+            const mark_all = home.selectElement('label[for="toggle-all"]');
+            mark_all.addClass('hide-mark');
             const footer = home.selectElement('footer.footer');
             footer.addClass('hidden');
         }
@@ -74,8 +78,8 @@ export default (prevCall) => {
                     })
                 ]),
                 home.createElement('section', { class: 'main' }, [
-                    home.createElement('input', { name: 'toggle-all', id: 'toggle-all', class: 'toggle-all', type: 'checkbox' }, []),
-                    home.createElement('label', { for: 'toggle-all', onClick: markAllTask }, ['Mark all as complete']),
+                    home.createElement('input', { id: 'toggle-all', class: 'toggle-all', type: 'checkbox' }),
+                    home.createElement('label', { for: 'toggle-all', class: 'hide-mark', onClick: markAllTask }),
                     home.createElement('ul', { id: '_todos', class: 'todo-list' },
                         home.getState('_todos').map((task) => Task(home, task))
                     )

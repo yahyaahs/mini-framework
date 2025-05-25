@@ -17,7 +17,12 @@ class __Element {
     }
 
     useRef(ref) {
-        return ref == 'id' ? document.getElementById(ref) : document.querySelector(`[key="${this.key}"]`);
+        const element = ref == 'id' ? document.getElementById(ref) : document.querySelector(`[key="${this.key}"]`);
+        if (element) {
+            return element;
+        } else{
+            return document.querySelector(`[key="${this.attrs.key}"]`);
+        }
     }
 
     toggleClass(className) {

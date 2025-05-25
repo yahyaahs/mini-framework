@@ -9,6 +9,13 @@ const Task = (root, newTask) => {
         if (task) task.toggleClass('completed');
         if (location.pathname === '/active') task.toggleClass('hidden');
         if (location.pathname === '/completed') task.toggleClass('hidden');
+
+        const mark_all = root.selectElement('#toggle-all');
+        if (tasks.every(t => t.attrs.class == "completed")) {
+            mark_all.useRef().checked = true;
+        } else {
+            mark_all.useRef().checked = false;
+        }
     }
 
     const removeTask = (e) => {
@@ -21,6 +28,8 @@ const Task = (root, newTask) => {
         root.setState('_todos', newtasks)
         root.setState('_taskCount', `${newtasks.length} items left`)
         if (newtasks.length === 0) {
+            const mark_all = root.selectElement('label[for="toggle-all"]');
+            mark_all.addClass('hide-mark');
             const footer = root.selectElement('footer.footer');
             footer.addClass('hidden');
         }
