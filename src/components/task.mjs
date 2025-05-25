@@ -1,7 +1,4 @@
 const Task = (root, newTask) => {
-    const taskId = `_taskN_${root.keys}`
-    root.useState(taskId, newTask.task)
-
     const markTask = (e) => {
         const taskKey = e.target.parentElement?.parentElement?.getAttribute('key');
         if (!taskKey) return;
@@ -66,12 +63,15 @@ const Task = (root, newTask) => {
         task.removeClass('editing')
     }
 
+    const taskId = `_taskN_${root.getKey()}`
+    root.useState(taskId, newTask.task)
+
     let taskClass = newTask.isDone ? 'completed' : ''
     if (location.pathname === '/completed') taskClass += ' hidden';
 
     return root.createElement('li', { class: taskClass }, [
         root.createElement('div', { class: 'view' }, [
-            root.createElement('input', { id: `_taskX_${root.keys}`, class: 'toggle', type: 'checkbox', onClick: markTask }, []),
+            root.createElement('input', { class: 'toggle', type: 'checkbox', onClick: markTask }, []),
             root.createElement('label', { id: taskId, onDblClick: updateTask }, [newTask.task]),
             root.createElement('button', { class: 'destroy', onClick: removeTask }, []),
         ]),
