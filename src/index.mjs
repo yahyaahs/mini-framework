@@ -32,12 +32,21 @@ export default (prevCall) => {
         }
     }
 
+    let toggelMark = false;
     const markAllTask = () => {
         const tasks = home.getState('_todos');
         for (let task of tasks) {
-            task.addClass('completed');
-            document.getElementById(task.children[0].children[0]?.attrs?.id).checked = true
+            if (toggelMark) {
+                task.removeClass('completed');
+                const checkbox = task.children[0].children[0].useRef();
+                checkbox.checked = false;
+            } else {
+                task.addClass('completed');
+                const checkbox = task.children[0].children[0].useRef();
+                checkbox.checked = true;
+            }
         }
+        toggelMark = !toggelMark;
     }
 
     const clearDoneTask = () => {
@@ -57,14 +66,15 @@ export default (prevCall) => {
                 home.createElement('header', { class: 'header' }, [
                     home.createElement('h1', {}, ['todos']),
                     home.createElement('input', {
-                        type: 'text', maxlength: 50, placeholder: 'What needs to be done?',
+                        id: 'todo-input',
                         class: 'new-todo',
+                        type: 'text', maxlength: 50, placeholder: 'What needs to be done?',
                         autofocus: true,
                         onKeydown: addNewTask,
                     })
                 ]),
                 home.createElement('section', { class: 'main' }, [
-                    home.createElement('label', { id: 'toggle-all', class: 'toggle-all', type: 'checkbox' }, []),
+                    home.createElement('input', { name: 'toggle-all', id: 'toggle-all', class: 'toggle-all', type: 'checkbox' }, []),
                     home.createElement('label', { for: 'toggle-all', onClick: markAllTask }, ['Mark all as complete']),
                     home.createElement('ul', { id: '_todos', class: 'todo-list' },
                         home.getState('_todos').map((task) => Task(home, task))

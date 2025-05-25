@@ -16,6 +16,9 @@ class __Element {
         });
     }
 
+    useRef(ref) {
+        return ref == 'id' ? document.getElementById(ref) : document.querySelector(`[key="${this.key}"]`);
+    }
 
     toggleClass(className) {
         const prevClasses = this.attrs.class || '';

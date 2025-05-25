@@ -146,6 +146,12 @@ class __V_Dom {
         return null;
     }
 
+    getKey() {
+        let key = this.keys;
+        this.keys++;
+        return key;
+    }
+
     selectElement(query) {
         const element = document.querySelector(query);
         if (element) {

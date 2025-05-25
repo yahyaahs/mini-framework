@@ -36,8 +36,8 @@ const Task = (root, newTask) => {
         const tasks = root.getState('_todos');
         const task = tasks.find(t => t.key == taskKey);
 
-        task.addClass('editing')
-        const newInput = document.querySelector(`[key="${task.children[1].children[0].key}"]`)
+        task.addClass('editing');
+        const newInput = task.children[1].children[0].useRef();
         newInput.value = e.target.textContent;
         newInput.focus();
     }
