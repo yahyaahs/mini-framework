@@ -15,21 +15,15 @@ export default (prevCall) => {
     home.useState('_todos', [])
     home.useState('_taskCount', '0 items left')
 
-    // UPDATED: helper to count active (not completed) tasks and update counter state
-    const updateActiveCount = () => {
-        const tasks = home.getState('_todos');
-        const activeCount = tasks.filter(t => !t.attrs.class.includes('completed')).length;
-        home.setState('_taskCount', `${activeCount} items left`);
-    }
-
     const addNewTask = (e) => {
         if (e.key === 'Enter' && e.target.value.length > 0) {
             const prevTask = home.getState('_todos');
             home.setState('_todos', [...prevTask, Task(home, { task: e.target.value, isDone: false })]);
 
-            updateActiveCount();  // UPDATED: use helper here
+            const newTasks = home.getState('_todos');
+            home.setState('_taskCount', `${newTasks.length} items left`)
 
-            if (home.getState('_todos').length === 1) {
+            if (newTasks.length === 1) {
                 const mark_all = home.selectElement('label[for="toggle-all"]');
                 mark_all.removeClass('hide-mark');
                 const footer = home.selectElement('footer.footer');
@@ -55,17 +49,13 @@ export default (prevCall) => {
                 checkbox.checked = true;
             }
         }
-
-        updateActiveCount();  // UPDATED: update count after toggling all tasks
     }
 
     const clearDoneTask = (e) => {
         const tasks = home.getState('_todos');
         const newtasks = tasks.filter(t => !t.attrs.class.includes('completed'));
         home.setState('_todos', newtasks)
-
-        updateActiveCount();  // UPDATED: use helper here
-
+        home.setState('_taskCount', `${newtasks.length} items left`)
         if (newtasks.length === 0) {
             const mark_all = home.selectElement('label[for="toggle-all"]');
             mark_all.addClass('hide-mark');
@@ -96,7 +86,7 @@ export default (prevCall) => {
                 ]),
                 home.createElement('footer', { class: 'footer hidden' }, [
                     home.createElement('span', { class: 'todo-count' }, [
-                        home.createElement('strong', { id: '_taskCount' }, [home.getState('_taskCount')])
+                        home.createElement('strong', { id: '_taskCount' }, [`0 items left`])
                     ]),
                     Filter(home),
                     home.createElement('button', { class: 'clear-completed', onClick: clearDoneTask }, ['Clear completed']),
