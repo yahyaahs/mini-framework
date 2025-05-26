@@ -125,8 +125,8 @@ class __V_Dom {
         return null
     }
 
-    useState(name) {
-        this.state.set(name, [])
+    useState(name, val) {
+        this.state.set(name, val)
     }
 
     getState(key) {
