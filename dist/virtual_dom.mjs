@@ -17,21 +17,6 @@ class __V_Dom {
         return this
     }
 
-    getElement(key, root = this.elements) {
-        const search = (elem) => {
-            elem.forEach(elem => {
-                if (elem.key == key) return elem;
-
-                if (elem.children.length > 0) {
-                    search(elem)
-                }
-            })
-        }
-
-        search(root)
-        return null
-    }
-
     render(container) {
         if (!container) {
             throw new Error("Container element is required for rendering");
