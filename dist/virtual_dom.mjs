@@ -32,20 +32,13 @@ class __V_Dom {
         return null
     }
 
-    create() {
-        return this.elements.map(elem => {
-            return typeof elem === 'function' ? elem() : elem;
-        });
-    }
-
     render(container) {
         if (!container) {
             throw new Error("Container element is required for rendering");
         }
         container.innerHTML = '';
-        const elements = this.create();
-        elements.forEach(elem => {
-            const domElement = elem.render(1);
+        this.elements.forEach(elem => {
+            const domElement = elem.render();
             container.appendChild(domElement);
         });
         this.rootElement = container;
@@ -87,35 +80,6 @@ class __V_Dom {
         } else if (typeof state_Compo !== "object") {
             compo.innerHTML = state_Compo;
         }
-    }
-
-
-    hydrate(container) {
-        if (!container) {
-            throw new Error("Container element is required for hydration");
-        }
-
-        const elements = this.elements.map(elem =>
-            typeof elem === 'function' ? elem().toJSON() : elem.toJSON()
-        )
-
-        this.elements = elements.map(elemData => this.recreateElement(elemData));
-        return this.render(container);
-    }
-
-    recreateElement(elemData) {
-        if (typeof elemData === 'string') return elemData;
-
-        const { tag, attrs, children, events } = elemData;
-        const elem = new __Element(tag, attrs, children.map(child => this.recreateElement(child)), this);
-
-        if (events) {
-            events.forEach(({ name, handler }) => {
-                elem.registerEvent(name, handler);
-            });
-        }
-
-        return elem;
     }
 
     findElementByDom(key) {
@@ -179,8 +143,7 @@ class __V_Dom {
     }
 
     renderToString() {
-        const elements = this.create();
-        return elements.map(elem => elem.renderToString()).join('');
+        return this.elements.map(elem => elem.renderToString()).join('');
     }
 }
 

@@ -21,7 +21,7 @@ const loadPage = async (path) => {
         const container = document.getElementById('app')
         if (serverApp && serverApp !== null) {
             container.innerHTML = serverApp.renderToString();
-            serverApp.hydrate(container);
+            serverApp.render(container);
             __V_Server.PrevApp.set(path, serverApp)
         }
     } catch (error) {

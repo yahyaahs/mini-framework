@@ -130,7 +130,7 @@ class __Element {
             if (typeof child === 'string') {
                 element.appendChild(document.createTextNode(child));
             } else {
-                const childElement = child.render(10);
+                const childElement = child.render();
                 if (childElement) {
                     element.appendChild(childElement);
                 }
