@@ -141,11 +141,6 @@ class __Element {
     }
 
     renderToString() {
-        if (typeof this.tag === 'function') {
-            const result = this.tag(this.attrs, this.children);
-            return result instanceof Element ? result.renderToString() : String(result);
-        }
-
         let html = `<${this.tag}`;
 
         Object.entries(this.attrs).forEach(([key, value]) => {

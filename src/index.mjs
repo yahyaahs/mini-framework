@@ -58,7 +58,7 @@ export default (prevCall) => {
         home.setState('_taskCount', `${tasks.length - count} items left`)
     }
 
-    const clearDoneTask = (e) => {
+    const clearDoneTask = () => {
         const tasks = home.getState('_todos');
         const newtasks = tasks.filter(t => !t.attrs.class.includes('completed'));
         home.setState('_todos', newtasks)

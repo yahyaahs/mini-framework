@@ -19,7 +19,7 @@ const server = createServer(async (req, res) => {
 
         if (page) {
             try {
-                const webPath = '/' + path.relative('.', page).replace(/\\/g, '/');
+                const webPath = '/' + path.relative('.', page);
 
                 res.writeHead(200, { 'Content-Type': 'text/plain' });
                 res.end(webPath);
