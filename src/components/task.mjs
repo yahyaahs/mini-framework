@@ -10,6 +10,9 @@ const Task = (root, newTask) => {
         if (location.pathname === '/active') task.toggleClass('hidden');
         if (location.pathname === '/completed') task.toggleClass('hidden');
 
+        const count = tasks.filter(t => t.attrs.class.includes("completed")).length;
+        root.setState('_taskCount', `${tasks.length - count} items left`)
+
         const mark_all = root.selectElement('#toggle-all');
         if (tasks.every(t => t.attrs.class == "completed")) {
             mark_all.useRef().checked = true;
@@ -26,7 +29,10 @@ const Task = (root, newTask) => {
         const newtasks = tasks.filter(t => t.key != taskKey);
 
         root.setState('_todos', newtasks)
-        root.setState('_taskCount', `${newtasks.length} items left`)
+
+        const count = tasks.filter(t => t.attrs.class.includes("completed")).length;
+        root.setState('_taskCount', `${tasks.length - count} items left`)
+
         if (newtasks.length === 0) {
             const mark_all = root.selectElement('label[for="toggle-all"]');
             mark_all.addClass('hide-mark');

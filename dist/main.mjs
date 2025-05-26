@@ -9,15 +9,15 @@ const loadPage = async (path) => {
     try {
         const res = await fetch(`/api${path}`);
         let data = '';
-        if (res.status === 404){
+        if (res.status === 404) {
             data = '/src/404.mjs'
-        }else{
+        } else {
             data = await res.text();
         }
 
         const { default: compoGenerator } = await import(`${data}`);
         const serverApp = compoGenerator(__V_Server.PrevApp.get(path));
-        
+
         const container = document.getElementById('app')
         if (serverApp && serverApp !== null) {
             container.innerHTML = serverApp.renderToString();

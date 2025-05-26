@@ -20,7 +20,7 @@ class __Element {
         const element = ref == 'id' ? document.getElementById(ref) : document.querySelector(`[key="${this.key}"]`);
         if (element) {
             return element;
-        } else{
+        } else {
             return document.querySelector(`[key="${this.attrs.key}"]`);
         }
     }

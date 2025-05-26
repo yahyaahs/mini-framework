@@ -120,7 +120,7 @@ class __V_Dom {
 
     findElementByDom(key) {
         if (!key) {
-            throw new Error("How can be create element without key ya wld l97ba");
+            throw new Error("Error no key found in this element");
         }
         const search = (elem) => {
             const elemKey = elem.attrs?.key;
@@ -161,8 +161,8 @@ class __V_Dom {
         return null
     }
 
-    useState() {
-        this.state.set('_todos', [])
+    useState(name) {
+        this.state.set(name, [])
     }
 
     getState(key) {

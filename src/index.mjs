@@ -21,7 +21,9 @@ export default (prevCall) => {
             home.setState('_todos', [...prevTask, Task(home, { task: e.target.value, isDone: false })]);
 
             const newTasks = home.getState('_todos');
-            home.setState('_taskCount', `${newTasks.length} items left`)
+
+            const count = newTasks.filter(t => t.attrs.class.includes("completed")).length;
+            home.setState('_taskCount', `${newTasks.length - count} items left`)
 
             if (newTasks.length === 1) {
                 const mark_all = home.selectElement('label[for="toggle-all"]');
@@ -36,8 +38,10 @@ export default (prevCall) => {
 
     const markAllTask = () => {
         if (location.pathname === '/completed') return;
+
         const tasks = home.getState('_todos');
         const toggelMark = tasks.every(t => t.attrs.class == "completed");
+
         for (let task of tasks) {
             if (toggelMark) {
                 task.removeClass('completed');
@@ -49,13 +53,19 @@ export default (prevCall) => {
                 checkbox.checked = true;
             }
         }
+
+        const count = tasks.filter(t => t.attrs.class.includes("completed")).length;
+        home.setState('_taskCount', `${tasks.length - count} items left`)
     }
 
     const clearDoneTask = (e) => {
         const tasks = home.getState('_todos');
         const newtasks = tasks.filter(t => !t.attrs.class.includes('completed'));
         home.setState('_todos', newtasks)
-        home.setState('_taskCount', `${newtasks.length} items left`)
+
+        const count = newtasks.filter(t => t.attrs.class.includes("completed")).length;
+        home.setState('_taskCount', `${newtasks.length - count} items left`)
+
         if (newtasks.length === 0) {
             const mark_all = home.selectElement('label[for="toggle-all"]');
             mark_all.addClass('hide-mark');
