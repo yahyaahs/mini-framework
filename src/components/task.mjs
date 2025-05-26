@@ -10,12 +10,17 @@ const Task = (root, newTask) => {
         if (location.pathname === '/active') task.toggleClass('hidden');
         if (location.pathname === '/completed') task.toggleClass('hidden');
 
+        // Update toggle-all checkbox state
         const mark_all = root.selectElement('#toggle-all');
         if (tasks.every(t => t.attrs.class == "completed")) {
             mark_all.useRef().checked = true;
         } else {
             mark_all.useRef().checked = false;
         }
+
+        // UPDATED: Update active count after marking
+        const activeCount = tasks.filter(t => !t.attrs.class.includes('completed')).length;
+        root.setState('_taskCount', `${activeCount} items left`);
     }
 
     const removeTask = (e) => {
@@ -25,8 +30,12 @@ const Task = (root, newTask) => {
         const tasks = root.getState('_todos');
         const newtasks = tasks.filter(t => t.key != taskKey);
 
-        root.setState('_todos', newtasks)
-        root.setState('_taskCount', `${newtasks.length} items left`)
+        root.setState('_todos', newtasks);
+
+        // UPDATED: Update active count after removal
+        const activeCount = newtasks.filter(t => !t.attrs.class.includes('completed')).length;
+        root.setState('_taskCount', `${activeCount} items left`);
+
         if (newtasks.length === 0) {
             const mark_all = root.selectElement('label[for="toggle-all"]');
             mark_all.addClass('hide-mark');
@@ -78,7 +87,7 @@ const Task = (root, newTask) => {
     let taskClass = newTask.isDone ? 'completed' : ''
     if (location.pathname === '/completed') taskClass += ' hidden';
 
-    return root.createElement('li', { class: taskClass }, [
+    return root.createElement('li', { class: taskClass, key: taskId }, [  // Added key prop for unique identification
         root.createElement('div', { class: 'view' }, [
             root.createElement('input', { class: 'toggle', type: 'checkbox', onClick: markTask }, []),
             root.createElement('label', { id: taskId, onDblClick: updateTask }, [newTask.task]),
